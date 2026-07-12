@@ -1,135 +1,135 @@
-# IT Compliance Framework — 미국 제조업 GDPR/CCPA, IT Audit, TPRM 정책 수립 및 GitHub 공시 전략
+# IT Compliance Framework — US Manufacturing GDPR/CCPA, IT Audit, TPRM Policy Design & GitHub Publication Strategy
 
 > **Wonhee Richard Lee** | Senior Cloud Systems Administrator
 >
-> a manufacturing company에서의 IPO 지원, Annual IT/OT Audit 설계, a global consumer electronics partner project TPRM 경험을 바탕으로 한 실무 방법론 문서입니다. 본 문서는 `scale600/it-compliance-framework` GitHub Repository의 설계 기반이며, 이력서에 언급된 GDPR/CCPA, IT Audit, TPRM 경험을 공개적으로 검증 가능한 형태로 제공하는 것이 최종 목표입니다.
+> A practical methodology document based on IPO support, Annual IT/OT Audit design, and a global consumer electronics partner project TPRM experience at a manufacturing company. This document serves as the design basis for the `scale600/it-compliance-framework` GitHub Repository, with the ultimate goal of providing publicly verifiable evidence for the GDPR/CCPA, IT Audit, and TPRM experience listed on my resume.
 >
-> 법률 전문가(변호사/DPO) 검토 필수. 본 문서는 일반 가이드이며 회사 상황에 맞게 커스터마이징 필요.
+> Legal professional (attorney/DPO) review required. This document is a general guide and must be customized to company-specific circumstances.
 
 ---
 
-## 목차
+## Table of Contents
 
-1. [GDPR & CCPA 정책 수립](#1-gdpr--ccpa-정책-수립)
-2. [Annual IT Audit 정책 수립](#2-annual-it-audit-정책-수립)
-3. [TPRM 정책 수립](#3-tprm-정책-수립)
-4. [통합 운영 및 유지보수](#4-통합-운영-및-유지보수)
-5. [GitHub Repository 전략](#5-github-repository-전략)
-
----
-
-## 제조업 특성 및 주요 PII 흐름
-
-미국 제조업(automotive, machinery, electronics, consumer goods 등)은 IT(ERP, CRM, HRIS) + OT(생산 라인, IoT 센서, PLC/SCADA) 시스템이 복잡하게 연결됩니다. 주요 PII 흐름:
-
-| 영역 | 데이터 유형 | 주요 시스템 |
-|------|------------|------------|
-| 직원/작업자 | 이름, SSN, biometric(지문/얼굴인식), 건강/안전 기록, 작업 로그, CCTV | HRIS(Workday), Payroll, 출입 시스템 |
-| 고객 (B2B) | 구매/엔지니어링 담당자 연락처, 주문 사양, 결제 정보 | CRM(Salesforce), ERP(SAP/Oracle) |
-| 공급망/벤더 | 연락처, 계약 서류, 금융 정보, 배송 주소 | ERP, WMS, 벤더 포털 |
-| 생산/IoT | 작업자 ID + 센서 데이터(위치/시간), 품질 검사 기록 | MES, PLC/SCADA, IoT 센서 |
-| 기타 | IP/device ID, inferred data(생산 효율 분석) | 웹/포털, Analytics |
-
-글로벌 공급망으로 인해 EU 데이터(수출/고객) 및 CA 주민 데이터가 혼재될 수 있어 GDPR + CCPA/CPRA를 동시 고려해야 합니다.
+1. [GDPR & CCPA Policy Design](#1-gdpr--ccpa-policy-design)
+2. [Annual IT Audit Policy Design](#2-annual-it-audit-policy-design)
+3. [TPRM Policy Design](#3-tprm-policy-design)
+4. [Integrated Operations & Maintenance](#4-integrated-operations--maintenance)
+5. [GitHub Repository Strategy](#5-github-repository-strategy)
 
 ---
 
-## 1. GDPR & CCPA 정책 수립
+## Manufacturing Characteristics & Key PII Flows
 
-### 1.1 시스템 구조 파악 (1-2주)
+US manufacturing (automotive, machinery, electronics, consumer goods, etc.) involves complexly interconnected IT (ERP, CRM, HRIS) + OT (production lines, IoT sensors, PLC/SCADA) systems. Key PII flows:
 
-**크로스-펑셔널 팀 구성:** IT/OT, HR, 공급망, 법무, 생산팀 참여.
+| Domain | Data Types | Key Systems |
+|--------|-----------|-------------|
+| Employees/Workers | Name, SSN, biometric (fingerprint/facial recognition), health/safety records, work logs, CCTV | HRIS (Workday), Payroll, Access Control Systems |
+| Customers (B2B) | Procurement/engineering contact details, order specifications, payment information | CRM (Salesforce), ERP (SAP/Oracle) |
+| Supply Chain/Vendors | Contact details, contract documents, financial information, shipping addresses | ERP, WMS, Vendor Portals |
+| Production/IoT | Worker ID + sensor data (location/time), quality inspection records | MES, PLC/SCADA, IoT Sensors |
+| Other | IP/device ID, inferred data (production efficiency analytics) | Web/Portals, Analytics |
 
-**자산 인벤토리 항목:**
+Due to global supply chains, EU data (exports/customers) and CA resident data may be intermingled, requiring simultaneous consideration of GDPR + CCPA/CPRA.
 
-| 카테고리 | 시스템 예시 |
-|---------|------------|
-| IT 시스템 | ERP(SAP/Oracle), CRM(Salesforce), HRIS(Workday), WMS(물류) |
-| OT/생산 | MES, PLC/SCADA, IoT 센서(온도/진동/작업자 트래킹), CCTV |
-| 타사 서비스 | 클라우드(AWS/Azure), 물류 파트너(FedEx/UPS API), 벤더 포털, Analytics(Google Analytics) |
-| 오프라인 | 종이 문서, USB, 이메일 첨부 |
+---
 
-**도구:** Excel/Google Sheets + Visio/draw.io로 시스템 다이어그램 작성.
-**참고 표준:** NIST, IEC 62443.
+## 1. GDPR & CCPA Policy Design
 
-### 1.2 PII 정의 및 분류 (1주)
+### 1.1 System Architecture Discovery (1-2 weeks)
 
-| 규제 | 정의 |
-|------|------|
-| **GDPR** | "identified or identifiable natural person"에 관한 모든 정보. Special Category(건강, 인종, 노동조합 등) 별도 보호. |
-| **CCPA/CPRA** | "Personal Information" — 소비자/가구와 직·간접 연관된 정보(11개 카테고리). Sensitive PI(SSN, geolocation, health, biometrics 등) 별도 보호. Household data 포함. |
+**Cross-functional team composition:** IT/OT, HR, Supply Chain, Legal, Production team participation.
 
-**분류 매트릭스:**
+**Asset inventory items:**
 
-| Tier | 유형 | 예시 | 보호 수준 |
-|------|------|------|----------|
-| Tier 1 | Direct Identifiers | 이름, SSN, 이메일 | 최고 |
-| Tier 2 | Quasi-identifiers | IP, Employee ID | 높음 |
-| Sensitive | 특수 범주 | Biometric, Health, Precise Geolocation | 최고 + 별도 동의 |
+| Category | System Examples |
+|----------|----------------|
+| IT Systems | ERP (SAP/Oracle), CRM (Salesforce), HRIS (Workday), WMS (Logistics) |
+| OT/Production | MES, PLC/SCADA, IoT Sensors (temperature/vibration/worker tracking), CCTV |
+| Third-Party Services | Cloud (AWS/Azure), Logistics Partners (FedEx/UPS API), Vendor Portals, Analytics (Google Analytics) |
+| Offline | Paper documents, USB drives, email attachments |
 
-**Data Minimization 원칙:** 불필요한 데이터는 즉시 삭제 또는 익명화.
+**Tools:** Excel/Google Sheets + Visio/draw.io for system diagrams.
+**Reference Standards:** NIST, IEC 62443.
 
-### 1.3 데이터 흐름 매핑 / RoPA (2-4주)
+### 1.2 PII Definition & Classification (1 week)
 
-GDPR Article 30 Record of Processing Activities(RoPA)와 CCPA 데이터 인벤토리의 핵심.
+| Regulation | Definition |
+|------------|------------|
+| **GDPR** | All information relating to an "identified or identifiable natural person." Special Category (health, race, trade union membership, etc.) separately protected. |
+| **CCPA/CPRA** | "Personal Information" — information directly or indirectly associated with a consumer/household (11 categories). Sensitive PI (SSN, geolocation, health, biometrics, etc.) separately protected. Includes household data. |
 
-**RoPA 템플릿 컬럼:**
+**Classification Matrix:**
 
-| 항목 | 설명 |
-|------|------|
-| Processing Activity | 처리 활동명 (예: "Employee Time Tracking via IoT") |
-| Data Subjects | 데이터 주체 (Employees, Contractors) |
-| Categories of Personal Data | 데이터 유형 (Name, Employee ID, Timestamp, Location) |
-| Purposes | 처리 목적 (Payroll, Safety Compliance) |
+| Tier | Type | Examples | Protection Level |
+|------|------|----------|-----------------|
+| Tier 1 | Direct Identifiers | Name, SSN, Email | Highest |
+| Tier 2 | Quasi-identifiers | IP, Employee ID | High |
+| Sensitive | Special Categories | Biometric, Health, Precise Geolocation | Highest + separate consent |
+
+**Data Minimization Principle:** Immediately delete or anonymize unnecessary data.
+
+### 1.3 Data Flow Mapping / RoPA (2-4 weeks)
+
+Core of GDPR Article 30 Record of Processing Activities (RoPA) and CCPA data inventory.
+
+**RoPA Template Columns:**
+
+| Field | Description |
+|-------|-------------|
+| Processing Activity | Activity name (e.g., "Employee Time Tracking via IoT") |
+| Data Subjects | Subject categories (Employees, Contractors) |
+| Categories of Personal Data | Data types (Name, Employee ID, Timestamp, Location) |
+| Purposes | Processing purpose (Payroll, Safety Compliance) |
 | Lawful Basis | GDPR: Contract / Legitimate Interest / Consent; CCPA: Business Purpose |
-| Sources | 수집 경로 (HR System, Badge Reader, Sensors) |
-| Storage | 저장 위치 (On-prem Server / AWS us-east-1) |
-| Retention | 보유 기간 (Payroll 7년, Sensor logs 90일) |
-| Recipients | 수신자 (Internal HR, Payroll Processor, Insurance) |
-| Transfers | 국제 전송 (EU-US: SCC + DPF) |
-| Security Measures | 암호화(at-rest/transit), RBAC, MFA, Audit Logs |
-| Risks & Mitigation | DPIA 필요 여부 |
+| Sources | Collection path (HR System, Badge Reader, Sensors) |
+| Storage | Storage location (On-prem Server / AWS us-east-1) |
+| Retention | Retention period (Payroll 7 years, Sensor logs 90 days) |
+| Recipients | Recipients (Internal HR, Payroll Processor, Insurance) |
+| Transfers | International transfers (EU-US: SCC + DPF) |
+| Security Measures | Encryption (at-rest/transit), RBAC, MFA, Audit Logs |
+| Risks & Mitigation | DPIA required? |
 
-**제조업 구체적 데이터 흐름 예시:**
+**Manufacturing-specific data flow examples:**
 
 ```
-공급망: Vendor → ERP → Logistics Partner (국제 전송)
-생산: IoT Sensor → MES → Cloud Analytics (OT-IT Convergence)
+Supply Chain: Vendor → ERP → Logistics Partner (International Transfer)
+Production: IoT Sensor → MES → Cloud Analytics (OT-IT Convergence)
 HR: Onboarding → HRIS → Payroll (Sensitive Data)
 B2B: Customer Order → CRM/ERP → Fulfillment
 ```
 
-**방법론:** 부서별 인터뷰 → 시각적 다이어그램(draw.io) → 자동화 툴 도입 검토(OneTrust, DataGrail). 매년 또는 시스템 변경 시 검토.
+**Methodology:** Departmental interviews → Visual diagrams (draw.io) → Evaluate automation tools (OneTrust, DataGrail). Review annually or upon system changes.
 
-### 1.4 정책 문서화 (2-4주)
+### 1.4 Policy Documentation (2-4 weeks)
 
-**필수 문서 목록:**
+**Required Document List:**
 
-| 문서 | 설명 |
-|------|------|
-| Privacy Policy / Notice | 웹사이트 게시용 통합 정책 (GDPR + CCPA) |
-| Notice at Collection | 데이터 수집 시점 고지 (웹폼, 온보딩) |
-| Data Processing Agreement (DPA) | 모든 Processor/Vendor와 체결 |
-| Records of Processing Activities (RoPA) | 모든 처리 활동 기록 |
-| Data Subject Rights Procedure (DSAR) | Access, Deletion, Opt-out, Portability 처리 절차 |
-| Breach Response Plan | GDPR 72시간, CCPA 신속 통지 |
-| DPIA/PIA Template | 고위험 처리 시 영향 평가 |
-| Vendor/Supply Chain Assessment | 공급망 벤더 평가 |
-| Employee Training Policy | 연간 개인정보보호 교육 |
+| Document | Description |
+|----------|-------------|
+| Privacy Policy / Notice | Integrated policy for website publication (GDPR + CCPA) |
+| Notice at Collection | Data collection point notice (web forms, onboarding) |
+| Data Processing Agreement (DPA) | Execute with all Processors/Vendors |
+| Records of Processing Activities (RoPA) | Record all processing activities |
+| Data Subject Rights Procedure (DSAR) | Access, Deletion, Opt-out, Portability process |
+| Breach Response Plan | GDPR 72 hours, CCPA prompt notification |
+| DPIA/PIA Template | Impact assessment for high-risk processing |
+| Vendor/Supply Chain Assessment | Supply chain vendor assessment |
+| Employee Training Policy | Annual privacy training |
 
-**Privacy Policy 구조 (15-25페이지):**
+**Privacy Policy Structure (15-25 pages):**
 
-1. Introduction & Controller Info: 회사명, 주소, DPO/Privacy Contact
-2. Personal Information Collected: CCPA 카테고리 테이블 + GDPR 설명
-3. Sources & Purposes: 수집 경로 및 처리 목적
-4. Sharing/Selling: "We do not sell" 명시, Service Providers only
-5. International Transfers: SCC/DPF 설명
-6. Retention Periods: Category별 보유 기간
-7. Your Rights: Access, Delete, Opt-out, Correct 등 및 신청 방법(email, web form)
+1. Introduction & Controller Info: Company name, address, DPO/Privacy Contact
+2. Personal Information Collected: CCPA category table + GDPR description
+3. Sources & Purposes: Collection paths and processing purposes
+4. Sharing/Selling: "We do not sell" statement, Service Providers only
+5. International Transfers: SCC/DPF description
+6. Retention Periods: Per-category retention periods
+7. Your Rights: Access, Delete, Opt-out, Correct, etc. and submission methods (email, web form)
 8. Security Measures: Encryption, audits
 9. Updates & Contact
 
-**CCPA 카테고리 테이블 예시:**
+**CCPA Category Table Example:**
 
 | Category | Collected | Purpose | Disclosed | Sold |
 |----------|-----------|---------|-----------|------|
@@ -137,260 +137,260 @@ B2B: Customer Order → CRM/ERP → Fulfillment
 | Sensitive PI | Yes (Biometric) | Factory access control | No | No |
 | Commercial Info | Yes | Order processing | Service Providers | No |
 
-### 1.5 법적 근거 및 특화 영역
+### 1.5 Legal Bases & Specialized Areas
 
-- **GDPR Lawful Basis:** Contract(주문/고용 시 가장 일반적), Legitimate Interest(analytics), Consent(biometric), Legal Obligation.
-- **IoT/OT:** Sensor data pseudonymization 우선, 불필요 시 anonymization.
-- **HR:** Biometric/건강 기록 별도 보호, 명시적 동의.
-- **공급망:** Vendor 데이터 공유 제한, DPA 필수.
-- **Cross-border:** EU-US Data Privacy Framework(DPF) 또는 SCC + TIA.
+- **GDPR Lawful Basis:** Contract (most common for orders/employment), Legitimate Interest (analytics), Consent (biometric), Legal Obligation.
+- **IoT/OT:** Prioritize sensor data pseudonymization; anonymize when unnecessary.
+- **HR:** Separate protection for biometric/health records; explicit consent.
+- **Supply Chain:** Limit vendor data sharing; DPA mandatory.
+- **Cross-border:** EU-US Data Privacy Framework (DPF) or SCC + TIA.
 
-### 1.6 구현 타임라인
+### 1.6 Implementation Timeline
 
-| 기간 | 활동 |
-|------|------|
+| Period | Activity |
+|--------|----------|
 | Week 1-4 | Applicability Assessment + Gap Analysis + Data Inventory |
-| Week 5-8 | Full Data Mapping & RoPA 구축 |
+| Week 5-8 | Full Data Mapping & RoPA Build |
 | Week 9-12 | Policy Draft + Stakeholder Review |
-| Month 4 | Training + Notice Deployment (웹사이트, 온보딩) |
-| Ongoing | Annual Review (Q4 IT Audit 연계) |
+| Month 4 | Training + Notice Deployment (website, onboarding) |
+| Ongoing | Annual Review (linked to Q4 IT Audit) |
 
 ---
 
-## 2. Annual IT Audit 정책 수립
+## 2. Annual IT Audit Policy Design
 
-### 2.1 개요
+### 2.1 Overview
 
-**정책 문서:** "Annual IT & OT Security and Privacy Audit Policy" (10-15페이지)
+**Policy Document:** "Annual IT & OT Security and Privacy Audit Policy" (10-15 pages)
 
-**목적:** GDPR/CCPA 준수 증명, 위험 식별, 통제 효과성 검증, 지속 개선.
+**Objective:** Demonstrate GDPR/CCPA compliance, identify risks, verify control effectiveness, drive continuous improvement.
 
-**Scope:** 모든 IT/OT 시스템, 데이터 흐름, PII 처리, Vendor/TPRM.
+**Scope:** All IT/OT systems, data flows, PII processing, Vendor/TPRM.
 
-### 2.2 Audit Program (연간 체크리스트)
+### 2.2 Audit Program (Annual Checklist)
 
-| 영역 | 점검 항목 |
-|------|----------|
-| **Governance** | Policies 최신 상태? Roles & Responsibilities 명확? |
-| **Data Inventory & RoPA** | RoPA가 실제 데이터 흐름과 일치? 모든 PII 자산 식별? |
-| **Access Management** | RBAC/MFA 100% 적용? Privileged access quarterly review? |
-| **Data Protection** | Encryption(at-rest/transit) 적용? DLP 솔루션 운영? Retention 자동 삭제? |
-| **Vulnerability Management** | 월간 스캔 수행? Critical patch SLA(48시간) 준수? |
-| **Incident & Breach** | Table-top exercise 연 1회? GDPR 72시간 / CCPA 신속 통지 테스트? |
-| **Privacy Controls** | DSAR 처리 정확성/적시성(샘플 10건)? Consent 기록 유지? |
-| **OT/IoT Specific** | 네트워크 segmentation? Device inventory 최신? Firmware 업데이트? |
-| **Vendor/TPRM** | High-risk vendor sample audit? DPA 준수 확인? |
-| **Logging & Monitoring** | Audit trail immutable? SIEM alerting 정상? |
+| Domain | Check Items |
+|--------|------------|
+| **Governance** | Policies current? Roles & Responsibilities clear? |
+| **Data Inventory & RoPA** | RoPA matches actual data flows? All PII assets identified? |
+| **Access Management** | RBAC/MFA 100% deployed? Privileged access quarterly review? |
+| **Data Protection** | Encryption (at-rest/transit) applied? DLP solution operational? Retention auto-deletion? |
+| **Vulnerability Management** | Monthly scans performed? Critical patch SLA (48 hours) met? |
+| **Incident & Breach** | Annual table-top exercise? GDPR 72hr / CCPA prompt notification tested? |
+| **Privacy Controls** | DSAR accuracy/timeliness (sample of 10)? Consent records maintained? |
+| **OT/IoT Specific** | Network segmentation? Device inventory current? Firmware updated? |
+| **Vendor/TPRM** | High-risk vendor sample audit? DPA compliance verified? |
+| **Logging & Monitoring** | Audit trail immutable? SIEM alerting functional? |
 
-### 2.3 실행 방법론
+### 2.3 Execution Methodology
 
-| 단계 | 내용 |
-|------|------|
-| **Planning** | 1개월 전 Scope 확정, 팀 구성 (CISO + Privacy Officer 주도) |
-| **Fieldwork** | 2-4주 (remote + on-site factory), Document Review + Interviews + Technical Testing |
+| Phase | Content |
+|-------|---------|
+| **Planning** | 1 month prior: scope confirmation, team formation (CISO + Privacy Officer led) |
+| **Fieldwork** | 2-4 weeks (remote + on-site factory), Document Review + Interviews + Technical Testing |
 | **Reporting** | Executive Summary + Detailed Findings (Risk Rating: Critical/High/Medium/Low) + CAP Template |
-| **Follow-up** | 90일 내 Remediation Review, High risk 30일 이내 해결 |
+| **Follow-up** | Remediation review within 90 days; High risk resolved within 30 days |
 
-### 2.4 조직 및 산출물
+### 2.4 Organization & Deliverables
 
-**책임자:** CISO 주도, Audit Committee/Board 보고.
+**Lead:** CISO-led, reporting to Audit Committee/Board.
 
-**참여 부서:** IT, OT, HR, Legal, Business Units. 독립 검토자: Internal Audit 또는 External Auditor.
+**Participating Departments:** IT, OT, HR, Legal, Business Units. Independent reviewer: Internal Audit or External Auditor.
 
-**산출물 템플릿:**
-- Audit Checklist (Excel, Evidence 컬럼 포함)
+**Deliverable Templates:**
+- Audit Checklist (Excel, with Evidence column)
 - Findings Report Template (Issue | Evidence | Risk | Recommendation | Owner | Due Date)
 - CAP Tracker (Corrective Action Plan)
 
-### 2.5 연계
+### 2.5 Integration
 
-Audit 결과 → Privacy Policy / RoPA / TPRM 업데이트 (30일 이내). 연간 사이클: Q4 Full Audit → Q1 정책 업데이트.
+Audit results → Privacy Policy / RoPA / TPRM update (within 30 days). Annual cycle: Q4 Full Audit → Q1 Policy Update.
 
 ---
 
-## 3. TPRM 정책 수립
+## 3. TPRM Policy Design
 
-### 3.1 개요
+### 3.1 Overview
 
-**정책 문서:** "Third-Party Risk Management (TPRM) Policy" (15-20페이지) + Vendor Playbook
+**Policy Document:** "Third-Party Risk Management (TPRM) Policy" (15-20 pages) + Vendor Playbook
 
-**목적:** Trusted Software Developer Partners 선정·관리, 데이터 보호 의무 이행(DPA 체결, Audit Right), 공급망 리스크 최소화.
+**Objective:** Select and manage Trusted Software Developer Partners, fulfill data protection obligations (DPA execution, Audit Rights), minimize supply chain risk.
 
-**Scope:** 모든 Vendor. 특히 Software Developers(onshore/offshore, SaaS, custom development). High-risk: PII 접근, OT/IT integration, cloud hosting.
+**Scope:** All Vendors. Especially Software Developers (onshore/offshore, SaaS, custom development). High-risk: PII access, OT/IT integration, cloud hosting.
 
 ### 3.2 Vendor Lifecycle
 
 #### A. Selection & Due Diligence
 
-**Trusted Partner 기준:**
-- ISO 27001, SOC 2 Type II, GDPR/CCPA 인증 또는 equivalent
-- Privacy & Security Program 증빙 (DPO 임명, Breach Notification SLA ≤ 48시간)
-- 제조업 경험 (OT/IoT 보안, IEC 62443)
+**Trusted Partner Criteria:**
+- ISO 27001, SOC 2 Type II, GDPR/CCPA certification or equivalent
+- Privacy & Security Program evidence (DPO appointed, Breach Notification SLA ≤ 48 hours)
+- Manufacturing experience (OT/IoT security, IEC 62443)
 - Financial stability + Cyber Liability Insurance
 
 **Due Diligence Checklist:**
-- Questionnaire: Data 처리 범위, Sub-processor 목록, Breach 이력
-- Technical Review: Code security practices(SAST/DAST), Encryption, Access controls
+- Questionnaire: Data processing scope, Sub-processor list, Breach history
+- Technical Review: Code security practices (SAST/DAST), Encryption, Access controls
 - Legal Review: DPA readiness, Governing Law (US + EU)
-- Risk Scoring (0-100): PII exposure(40%), Security maturity(30%), Financial(10%), Reputation(20%)
+- Risk Scoring (0-100): PII exposure (40%), Security maturity (30%), Financial (10%), Reputation (20%)
 
 #### B. Contracting
 
-**DPA 필수 조항:**
+**DPA Mandatory Clauses:**
 - Processing only on documented instructions (GDPR Art. 28)
-- CCPA: "Service Provider"로서 Sell/Share 금지, Limited Use
-- Audit Rights: Annual + For-Cause (회사 또는 대리인)
-- Sub-processor: 사전 서면 승인 + 동일 수준 보호
-- Breach Notification: 24-48시간 이내
-- Data Return/Deletion: 계약 종료 시 30일 내 삭제 증적
-- Liability & Indemnification: Breach로 인한 벌금 보상
-- International Transfers: SCC/DPF 적용
-- Insurance: Cyber Liability 최소 $5M
+- CCPA: Prohibit Sale/Share as "Service Provider"; Limited Use
+- Audit Rights: Annual + For-Cause (Company or delegate)
+- Sub-processor: Prior written approval + equivalent protection level
+- Breach Notification: Within 24-48 hours
+- Data Return/Deletion: Delete with evidence within 30 days of contract termination
+- Liability & Indemnification: Compensation for breach-related fines
+- International Transfers: SCC/DPF applied
+- Insurance: Cyber Liability minimum $5M
 
-**Software Developer 특화:**
-- Secure SDLC 요구 (OWASP, Privacy by Design)
-- Code ownership, IP 보호, Backdoor 금지
+**Software Developer-Specific:**
+- Secure SDLC required (OWASP, Privacy by Design)
+- Code ownership, IP protection, Backdoor prohibition
 - Access Logging (developer access to PII)
 
 #### C. Ongoing Monitoring
 
-| Tier | 대상 | 모니터링 주기 |
-|------|------|-------------|
-| Tier 1 (High-risk) | PII/OT 접근 Software Partners | Quarterly Security Reports + Annual On-site/Remote Audit + Continuous Monitoring |
-| Tier 2 (Medium) | 일반 Vendor | Biannual + Continuous Monitoring (security scorecard) |
+| Tier | Target | Monitoring Frequency |
+|------|--------|---------------------|
+| Tier 1 (High-risk) | PII/OT access Software Partners | Quarterly Security Reports + Annual On-site/Remote Audit + Continuous Monitoring |
+| Tier 2 (Medium) | General Vendors | Biannual + Continuous Monitoring (security scorecard) |
 
-**KPI:** Uptime ≥99.9%, Incident resolution <4시간, Zero unauthorized PII access.
+**KPI:** Uptime ≥99.9%, Incident resolution <4 hours, Zero unauthorized PII access.
 
-**Software Developer 전용:**
-- Code Review / Penetration Testing 결과 공유
+**Software Developer-Specific:**
+- Code Review / Penetration Testing results sharing
 - Access Logging (developer access to PII)
-- Change Management 시 Privacy Impact Assessment(PIA)
+- Privacy Impact Assessment (PIA) upon Change Management
 - Code escrow (critical systems)
 
 #### D. Offboarding
 
 - Access Revocation (all accounts, API keys, shared repos)
-- Data Deletion Certificate 수취
-- Post-termination Audit (6개월 이내)
+- Data Deletion Certificate receipt
+- Post-termination Audit (within 6 months)
 
-### 3.3 조직 및 거버넌스
+### 3.3 Organization & Governance
 
-- **책임자:** CISO/Privacy Officer + Procurement + Legal
+- **Lead:** CISO/Privacy Officer + Procurement + Legal
 - **TPRM Committee:** Quarterly Meeting — High-risk Vendor Review
-- **도구:** GRC Platform (OneTrust, BitSight, ServiceNow GRC)
-- **교육:** Vendor-facing 팀(Procurement, IT) 대상 연 1회
+- **Tools:** GRC Platform (OneTrust, BitSight, ServiceNow GRC)
+- **Training:** Vendor-facing teams (Procurement, IT) — annual
 
-### 3.4 구현 타임라인
+### 3.4 Implementation Timeline
 
-| 기간 | 활동 |
-|------|------|
-| Month 1 | 기존 Vendor Inventory + Risk Tiering (Software Partners 우선) |
+| Period | Activity |
+|--------|----------|
+| Month 1 | Existing Vendor Inventory + Risk Tiering (Software Partners first) |
 | Month 2 | Standardize Questionnaire & DPA Template |
 | Month 3-4 | High-risk Contracts Renegotiation |
-| Month 5+ | Monitoring Process Rollout + IT Audit 연계 |
+| Month 5+ | Monitoring Process Rollout + IT Audit Integration |
 | Annual | Full TPRM Effectiveness Review |
 
 ---
 
-## 4. 통합 운영 및 유지보수
+## 4. Integrated Operations & Maintenance
 
-### 4.1 거버넌스 체계
+### 4.1 Governance Framework
 
-- **Privacy Committee:** DPO/CISO/Legal 주도, Quarterly Meeting
-- **연계 매트릭스:** Privacy Policy ↔ Audit Findings ↔ TPRM Contracts
-- **문서 관리:** Central Repository(SharePoint/GRC), Retention 7년
-- **Escalation:** Material findings → Executive Leadership 7일 이내 보고
+- **Privacy Committee:** DPO/CISO/Legal-led, Quarterly Meeting
+- **Integration Matrix:** Privacy Policy ↔ Audit Findings ↔ TPRM Contracts
+- **Document Management:** Central Repository (SharePoint/GRC), Retention 7 years
+- **Escalation:** Material findings → Executive Leadership within 7 days
 
-### 4.2 연간 사이클
+### 4.2 Annual Cycle
 
-| 분기 | 활동 |
-|------|------|
-| Q1 | Privacy Training + 정책 검토 |
+| Quarter | Activity |
+|---------|----------|
+| Q1 | Privacy Training + Policy Review |
 | Q2-Q3 | Monitoring & Evidence Collection |
 | Q4 | Integrated Audit (IT/OT + Privacy + TPRM) |
-| Post-Audit | Remediation tracking → 정책 업데이트 |
+| Post-Audit | Remediation tracking → Policy updates |
 
-### 4.3 전체 구현 타임라인 (6-9개월)
+### 4.3 Overall Implementation Timeline (6-9 months)
 
-| 기간 | 활동 |
-|------|------|
-| Month 1-2 | Assessment & Drafts (Gap Analysis, 정책 초안) |
+| Period | Activity |
+|--------|----------|
+| Month 1-2 | Assessment & Drafts (Gap Analysis, policy drafts) |
 | Month 3-5 | Data Mapping, Contracts Renegotiation, First Audit |
-| Month 6+ | Rollout, Training, Monitoring, Annual Cycle 진입 |
+| Month 6+ | Rollout, Training, Monitoring, Annual Cycle entry |
 
-### 4.4 핵심 지표 (KPI)
+### 4.4 Key Performance Indicators (KPIs)
 
-- RoPA coverage: 목표 100%
-- Audit findings closure rate: 목표 90일 내 95%+
-- Vendor compliance score: Tier 1 평균 80+/100
-- DSAR 응답 시간: GDPR 30일 / CCPA 45일 준수율 100%
+- RoPA coverage: Target 100%
+- Audit findings closure rate: Target 95%+ within 90 days
+- Vendor compliance score: Tier 1 average 80+/100
+- DSAR response time: GDPR 30 days / CCPA 45 days compliance rate 100%
 
 ---
 
-## 5. GitHub Repository 전략
+## 5. GitHub Repository Strategy
 
-### 5.1 목적
+### 5.1 Objective
 
-이력서에 언급된 GDPR/CCPA, IT Audit, TPRM 경험을 **공개적으로 검증 가능한 형태**로 제공. Recruiters/Hiring managers가 실제 정책·템플릿·방법론을 확인할 수 있도록 합니다.
+Provide the GDPR/CCPA, IT Audit, and TPRM experience listed on my resume in a **publicly verifiable form**. Enable recruiters/hiring managers to review actual policies, templates, and methodologies.
 
 **Repo:** `scale600/it-compliance-framework`
 
-### 5.2 Repository 구조
+### 5.2 Repository Structure
 
 ```
 it-compliance-framework/
-├── README.md                       # 메인 랜딩 페이지
+├── README.md                       # Main landing page
 ├── LICENSE                         # MIT or CC-BY
 ├── gdpr-ccpa/
 │   ├── policy-template.md          # Full Policy Template
-│   ├── ropa-template.md            # RoPA 컬럼 설명 및 예시
-│   ├── data-mapping-example.md     # 제조업 데이터 흐름 다이어그램 (Mermaid)
-│   ├── privacy-notice.md           # 웹사이트 게시용 Privacy Notice
-│   ├── dpa-template.md             # 표준 Data Processing Agreement
-│   └── dsar-procedure.md           # Data Subject Access Request 절차
+│   ├── ropa-template.md            # RoPA column descriptions and examples
+│   ├── data-mapping-example.md     # Manufacturing data flow diagrams (Mermaid)
+│   ├── privacy-notice.md           # Website-facing Privacy Notice
+│   ├── dpa-template.md             # Standard Data Processing Agreement
+│   └── dsar-procedure.md           # Data Subject Access Request procedure
 ├── it-audit/
-│   ├── annual-audit-program.md     # Audit Program 상세
-│   ├── audit-checklist.md          # 영역별 체크리스트
-│   ├── audit-report-template.md    # Findings Report 양식
+│   ├── annual-audit-program.md     # Audit Program details
+│   ├── audit-checklist.md          # Domain-level checklist
+│   ├── audit-report-template.md    # Findings Report format
 │   ├── cap-tracker.md              # Corrective Action Plan Tracker
-│   └── ot-iec62443-notes.md        # OT/IoT 환경 감사 노트
+│   └── ot-iec62443-notes.md        # OT/IoT audit considerations
 ├── tprm/
-│   ├── tprm-framework.md           # Vendor Lifecycle 4단계 상세
-│   ├── vendor-tiering-matrix.md    # Risk Tier 기준 및 평가표
-│   ├── due-diligence-questionnaire.md  # Vendor 평가 질문지 (20+ 항목)
-│   ├── standard-dpa-template.md    # TPRM 특화 DPA
-│   └── software-developer-checklist.md # Secure SDLC, Code Review 체크리스트
-├── evidence/                       # Anonymized artifacts (필수)
-│   ├── tprm-case-study.md        # a global consumer electronics partner TPRM 사례 (익명화)
-│   ├── compliance-dashboard.md     # 컴플라이언스 대시보드 예시
-│   └── audit-findings-example.md   # Audit Findings 샘플
+│   ├── tprm-framework.md           # Vendor Lifecycle 4-phase details
+│   ├── vendor-tiering-matrix.md    # Risk Tier criteria and scoring
+│   ├── due-diligence-questionnaire.md  # Vendor assessment questionnaire (20+ items)
+│   ├── standard-dpa-template.md    # TPRM-specific DPA
+│   └── software-developer-checklist.md # Secure SDLC, Code Review checklist
+├── evidence/                       # Anonymized artifacts (critical)
+│   ├── tprm-case-study.md        # a global consumer electronics partner TPRM case study (anonymized)
+│   ├── compliance-dashboard.md     # Compliance dashboard example
+│   └── audit-findings-example.md   # Audit Findings sample
 ├── resources/
-│   ├── glossary.md                 # 용어 정의
-│   └── references.md               # 참고 표준 및 자료
+│   ├── glossary.md                 # Terminology definitions
+│   └── references.md               # Reference standards and resources
 └── docs/
-    ├── overview.md                 # 전체 프레임워크 개요
-    └── manufacturing-use-cases.md  # 제조업 특화 사례
+    ├── overview.md                 # Overall framework overview
+    └── manufacturing-use-cases.md  # Manufacturing-specific use cases
 ```
 
-### 5.3 README.md 핵심 구성
+### 5.3 README.md Key Content
 
 ```markdown
 # IT Compliance Framework — Manufacturing
 
 **Wonhee Richard Lee** | Senior Cloud Systems Administrator
 
-a manufacturing company에서 구축한 GDPR/CCPA Compliance, Annual IT & OT Audit,
-TPRM(Third-Party Risk Management) 프레임워크를 공개적으로 문서화한 Repository입니다.
+This repository publicly documents the GDPR/CCPA Compliance, Annual IT & OT Audit,
+and TPRM (Third-Party Risk Management) frameworks built at a manufacturing company.
 
 ### Key Achievements
-- **GDPR/CCPA Framework**: IPO 준비 과정에서 전체 컴플라이언스 아키텍처 설계 및 구현
-- **Annual IT Audit**: IT/OT 통합 감사 프로그램 설계 및 운영
-- **TPRM**: a global consumer electronics partner project에서 Vendor Security Assessment 주도 → "Trusted Developer" 획득
+- **GDPR/CCPA Framework**: Designed and implemented the full compliance architecture during IPO preparation
+- **Annual IT Audit**: Designed and operated integrated IT/OT audit programs
+- **TPRM**: Led Vendor Security Assessment for a global consumer electronics partner project → Achieved "Trusted Developer" status
 
 ### Repository Sections
-- [GDPR & CCPA](./gdpr-ccpa/) — 정책, RoPA, Data Mapping, DPA
+- [GDPR & CCPA](./gdpr-ccpa/) — Policies, RoPA, Data Mapping, DPA
 - [Annual IT Audit](./it-audit/) — Checklist, Report Template, OT Security
-- [TPRM](./tprm/) — Vendor Lifecycle, Software Developer Partners 특화
+- [TPRM](./tprm/) — Vendor Lifecycle, Software Developer Partners focus
 
 ### Manufacturing Focus Areas
 - IoT / OT Environment Privacy & Security
@@ -402,32 +402,32 @@ TPRM(Third-Party Risk Management) 프레임워크를 공개적으로 문서화�
 **Contact**: wonhee.eng@gmail.com
 ```
 
-### 5.4 구현 시 주의사항
+### 5.4 Implementation Notes
 
-- **Anonymization 필수:** 회사명 → "Global Manufacturing Company", 수치/데이터는 fictionalize.
-- **형식:** Markdown 테이블 및 Mermaid 다이어그램 적극 활용. Excel 대신 Markdown 테이블 사용.
-- **GitHub Pages 활성화:** `https://scale600.github.io/it-compliance-framework` 로 웹사이트화.
-- **Resume 연계:** "Detailed IT Compliance frameworks publicly documented at: github.com/scale600/it-compliance-framework" 문구 추가.
-- **LinkedIn/GitHub Profile에 해당 Repo Pin.**
+- **Anonymization mandatory:** Company name → "Global Manufacturing Company"; fictionalize data/figures.
+- **Format:** Actively use Markdown tables and Mermaid diagrams. Use Markdown tables instead of Excel.
+- **GitHub Pages activation:** Publish as website at `https://scale600.github.io/it-compliance-framework`.
+- **Resume integration:** Add statement: "Detailed IT Compliance frameworks publicly documented at: github.com/scale600/it-compliance-framework".
+- **Pin repo on LinkedIn/GitHub Profile.**
 
-### 5.5 Evidence 폴더 중요성
+### 5.5 Evidence Folder Importance
 
-`evidence/` 폴더는 이 Repository의 신뢰도를 결정하는 가장 중요한 섹션입니다. 템플릿만으로는 누구나 다운로드 가능한 ICO/IAPP 자료와 차별화되지 않습니다. 최소한 아래 중 하나 이상 포함:
+The `evidence/` folder is the most critical section determining this repository's credibility. Templates alone do not differentiate from ICO/IAPP materials that anyone can download. Include at least one of the following:
 
-- 실제 Audit Findings 예시 (익명화된)
-- Compliance Dashboard 구성 예시
-- a global consumer electronics partner TPRM 프로젝트 요약 (성과 중심, 기밀 정보 제외)
-- 구현 전/후 비교 데이터
+- Actual Audit Findings examples (anonymized)
+- Compliance Dashboard configuration example
+- a global consumer electronics partner TPRM project summary (outcome-focused, excluding confidential information)
+- Pre/post-implementation comparison data
 
 ---
 
-## 부록: 주요 참고 표준 및 도구
+## Appendix: Key Reference Standards & Tools
 
-| 분야 | 표준/도구 |
-|------|----------|
-| 개인정보보호 | GDPR, CCPA/CPRA |
-| 정보보안 | ISO 27001, NIST SP 800-53, SOC 2 Type II |
-| OT/IoT 보안 | IEC 62443 |
+| Domain | Standards/Tools |
+|--------|----------------|
+| Privacy | GDPR, CCPA/CPRA |
+| Information Security | ISO 27001, NIST SP 800-53, SOC 2 Type II |
+| OT/IoT Security | IEC 62443 |
 | Data Mapping | Excel, OneTrust, DataGrail |
 | GRC | OneTrust, ServiceNow GRC, RSA Archer |
 | Vendor Risk | BitSight, Security Scorecard |
