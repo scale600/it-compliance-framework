@@ -10,33 +10,38 @@
 
 This repository documents a comprehensive **IT Compliance Framework** designed for US-based manufacturing companies that must comply with GDPR, CCPA/CPRA, implement annual IT/OT audits, and manage third-party vendor risk — particularly with software development partners.
 
-The framework is organized into three interconnected pillars:
+The framework is organized into three interconnected pillars forming a continuous improvement cycle:
 
-```
-                         ┌─────────────────────────────────┐
-                         │        IT COMPLIANCE             │
-                         │          FRAMEWORK               │
-                         └───────────────┬─────────────────┘
-                                         │
-           ┌─────────────────────────────┼─────────────────────────────┐
-           ▼                             ▼                             ▼
-  ┌─────────────────┐          ┌─────────────────┐          ┌─────────────────┐
-  │   GDPR / CCPA   │          │  ANNUAL IT & OT │          │      TPRM       │
-  │   COMPLIANCE    │◄────────►│      AUDIT      │◄────────►│  (VENDOR RISK)  │
-  │                 │  verify   │                 │  verify   │                 │
-  │  Policies, RoPA │          │  Checklist, CAP │          │  Lifecycle,     │
-  │  DPA, DSAR,     │          │  Report, OT/IoT │          │  Due Diligence, │
-  │  Privacy Notice │          │  (IEC 62443)    │          │  Scorecards     │
-  └─────────────────┘          └─────────────────┘          └─────────────────┘
-           │                             │                             │
-           └─────────────────────────────┼─────────────────────────────┘
-                                         │
-                                         ▼
-                              ┌─────────────────────┐
-                              │   ANNUAL REVIEW     │
-                              │   & CONTINUOUS      │
-                              │   IMPROVEMENT       │
-                              └─────────────────────┘
+```mermaid
+flowchart TB
+    MfgEnv["🏭 Manufacturing Environment<br/><br/>IT Systems: ERP · CRM · HRIS · WMS<br/>OT Systems: MES · PLC · SCADA · IoT<br/>Data: Employee Biometrics · B2B · Supply Chain"] --> Framework
+
+    Framework["IT COMPLIANCE FRAMEWORK"] --> P1
+    Framework --> P2
+    Framework --> P3
+
+    P1["🛡️ GDPR / CCPA Compliance<br/><br/>Policies · RoPA · DPA<br/>DSAR · Privacy Notice<br/>Cross-Border Transfers"]
+    P2["📋 Annual IT & OT Audit<br/><br/>10-Domain Checklist<br/>CAP Tracker · Findings Report<br/>OT/IEC 62443 Integration"]
+    P3["🔗 TPRM<br/>Vendor Risk Management<br/><br/>Lifecycle · Due Diligence<br/>Tiering · SDLC Checklist<br/>Continuous Monitoring"]
+
+    P1 <-..->|"defines scope for"| P2
+    P2 <-..->|"verifies"| P3
+    P3 <-..->|"enforces DPA obligations of"| P1
+
+    P1 --> Cycle
+    P2 --> Cycle
+    P3 --> Cycle
+
+    Cycle["🔄 Annual Review Cycle<br/><br/>Q4 Integrated Audit<br/>→ Findings & CAP<br/>→ Policy Updates<br/>→ Training Refresh"]
+
+    Cycle -.->|"continuous feedback"| Framework
+
+    style Framework fill:#1a365d,color:#fff
+    style P1 fill:#2b6cb0,color:#fff
+    style P2 fill:#2b6cb0,color:#fff
+    style P3 fill:#2b6cb0,color:#fff
+    style Cycle fill:#276749,color:#fff
+    style MfgEnv fill:#744210,color:#fff
 ```
 
 ### How the Pillars Connect

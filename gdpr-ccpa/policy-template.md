@@ -9,6 +9,36 @@
 
 ## 1. Introduction & Scope
 
+### Document Architecture
+
+```mermaid
+flowchart TB
+    PrivacyPolicy["📄 Privacy Policy / Notice<br/>Website · Onboarding · Vendor Portal"]
+    
+    PrivacyPolicy --> Operational["⚙️ Operational Documents"]
+    
+    Operational --> RoPA["📋 RoPA<br/>Record of Processing<br/>Article 30"]
+    Operational --> DPA["📝 DPA<br/>Data Processing<br/>Agreement"]
+    Operational --> DSAR["📬 DSAR Procedure<br/>Data Subject Rights<br/>Access·Delete·Portability"]
+    Operational --> DPIA["⚠️ DPIA/PIA<br/>High-Risk Processing<br/>Impact Assessment"]
+    Operational --> Breach["🚨 Breach Response<br/>GDPR 72hr · CCPA<br/>Notification Plan"]
+    Operational --> Training["🎓 Employee Training<br/>Annual Privacy<br/>Awareness"]
+    
+    RoPA --> Audit["📊 Verified by<br/>Annual IT Audit"]
+    DPA --> TPRM["🔗 Enforced via<br/>TPRM Contracts"]
+    DSAR --> Audit
+    
+    style PrivacyPolicy fill:#1a365d,color:#fff
+    style RoPA fill:#2b6cb0,color:#fff
+    style DPA fill:#2b6cb0,color:#fff
+    style DSAR fill:#2b6cb0,color:#fff
+    style DPIA fill:#e53e3e,color:#fff
+    style Breach fill:#dd6b20,color:#fff
+    style Training fill:#276749,color:#fff
+    style Audit fill:#718096,color:#fff
+    style TPRM fill:#718096,color:#fff
+```
+
 ### 1.1 Purpose
 
 This Global Data Privacy Policy establishes the framework for compliance with the **EU General Data Protection Regulation (GDPR)** and the **California Consumer Privacy Act / California Privacy Rights Act (CCPA/CPRA)** at [Company Name] ("the Company").

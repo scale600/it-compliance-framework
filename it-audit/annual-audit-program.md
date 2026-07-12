@@ -16,6 +16,23 @@ This document defines the **Annual IT & OT Security and Privacy Audit Program** 
 4. **Provide** evidence of ongoing compliance for regulatory inquiries and customer audits
 5. **Drive** continuous improvement through a structured Corrective Action Plan (CAP) process
 
+### Audit Lifecycle
+
+```mermaid
+flowchart LR
+    Plan["📅 PLAN<br/>Q4 -4 weeks<br/>Scope · Team<br/>Checklist Prep"] --> Field["🔎 FIELDWORK<br/>Q4 weeks 1-2<br/>Document Review<br/>Interviews · Testing<br/>Evidence Collection"]
+    Field --> Report["📊 REPORT<br/>Q4 week 3<br/>Risk Rating<br/>Findings Draft<br/>Management Review"]
+    Report --> CAP["✅ CAP<br/>Q4 week 4+<br/>Corrective Actions<br/>Owner · Due Date<br/>Remediation Tracking"]
+    CAP --> Verify["🔄 VERIFY<br/>Ongoing<br/>Re-Test · Evidence<br/>Closure Sign-Off"]
+    Verify -->|"Q1 Next Year"| Plan
+    
+    style Plan fill:#2b6cb0,color:#fff
+    style Field fill:#dd6b20,color:#fff
+    style Report fill:#e53e3e,color:#fff
+    style CAP fill:#276749,color:#fff
+    style Verify fill:#718096,color:#fff
+```
+
 ---
 
 ## 2. Scope

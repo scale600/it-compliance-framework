@@ -32,12 +32,18 @@ This TPRM Framework establishes the lifecycle governance for all third-party ven
 
 ## 2. Vendor Lifecycle
 
-```
-┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
-│  SELECTION   │───▶│ CONTRACTING  │───▶│  MONITORING  │───▶│ OFFBOARDING  │
-│  & DUE       │    │              │    │  & ONGOING   │    │              │
-│  DILIGENCE   │    │              │    │  MANAGEMENT  │    │              │
-└──────────────┘    └──────────────┘    └──────────────┘    └──────────────┘
+```mermaid
+flowchart LR
+    A["🔍 PHASE 1<br/>Selection &<br/>Due Diligence<br/><br/>Questionnaire<br/>Technical Review<br/>Risk Scoring<br/>GO / NO-GO"] -->|"Approved"| B["📝 PHASE 2<br/>Contracting<br/><br/>DPA Execution<br/>Audit Rights<br/>Breach SLA<br/>Insurance $5M+"]
+    B -->|"Active"| C["📊 PHASE 3<br/>Ongoing Monitoring<br/><br/>Quarterly Reviews<br/>Annual Audits<br/>Continuous Scorecard<br/>KPI Tracking"]
+    C -->|"Termination<br/>or Non-Renewal"| D["🚪 PHASE 4<br/>Offboarding<br/><br/>Data Deletion Cert<br/>Access Revocation<br/>Post-Term Audit"]
+    
+    C -->|"Re-Tier Trigger"| A
+    
+    style A fill:#e53e3e,color:#fff
+    style B fill:#dd6b20,color:#fff
+    style C fill:#2b6cb0,color:#fff
+    style D fill:#718096,color:#fff
 ```
 
 ---
