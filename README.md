@@ -6,6 +6,36 @@ This repository publicly documents the **GDPR/CCPA Compliance**, **Annual IT & O
 
 ---
 
+## Framework Architecture
+
+```mermaid
+flowchart TB
+    subgraph Inputs["INPUTS"]
+        Mfg["🏭 Manufacturing Environment<br/>IT/OT Systems, IoT, Supply Chain"]
+        Regs["📜 Regulations<br/>GDPR, CCPA/CPRA, IEC 62443"]
+    end
+
+    subgraph Pillars["THREE PILLARS"]
+        direction LR
+        P1["🛡️ GDPR / CCPA<br/>Compliance<br/><br/>Policy · RoPA · DPA<br/>DSAR · Privacy Notice"]
+        P2["📋 Annual IT & OT<br/>Audit<br/><br/>10-Domain Checklist<br/>CAP · IEC 62443"]
+        P3["🔗 TPRM<br/>Vendor Risk<br/><br/>Lifecycle · Due Diligence<br/>SDLC · Scorecards"]
+    end
+
+    subgraph Cycle["CONTINUOUS IMPROVEMENT"]
+        C1["🔍 Annual Audit<br/>Q4 Full Assessment"]
+        C2["📊 Findings & CAP<br/>Risk-Rated Remediation"]
+        C3["🔄 Policy Updates<br/>RoPA · DPA · Training"]
+    end
+
+    Inputs --> Pillars
+    P1 <-..->|"verify"| P2
+    P2 <-..->|"verify"| P3
+    P3 <-..->|"enforce DPA"| P1
+    Pillars --> Cycle
+    C3 -->|"feedback"| P1
+```
+
 ## Key Achievements
 
 - **GDPR/CCPA Framework** — Designed and implemented the full compliance architecture during IPO preparation, covering IT/OT systems, global supply chain data flows, and employee biometric data. Achieved 20–25% cloud cost reduction while maintaining compliance posture.

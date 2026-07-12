@@ -8,6 +8,22 @@
 
 The Compliance Dashboard provides executive leadership and the Privacy Committee with an at-a-glance view of the organization's compliance posture across three pillars: Privacy, Audit, and Vendor Risk.
 
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'pie1': '#2b6cb0', 'pie2': '#dd6b20', 'pie3': '#276749', 'pie4': '#e53e3e', 'pie5': '#718096', 'pie6': '#744210'}}}%%
+pie showData
+    title Compliance Maturity by Domain
+    "Governance & Policy" : 93
+    "Data Inventory & RoPA" : 88
+    "Access Management" : 91
+    "Data Protection" : 85
+    "Vulnerability Mgmt" : 78
+    "Incident Response" : 90
+    "Privacy Controls" : 87
+    "OT/IoT Security" : 72
+    "Vendor / TPRM" : 82
+    "Logging & Monitoring" : 95
+```
+
 ---
 
 ## Panel 1: Overall Compliance Health
